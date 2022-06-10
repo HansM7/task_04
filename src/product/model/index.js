@@ -4,6 +4,25 @@ class Product{
         this.data =data
     }
 
+    async save(product){
+        try {
+            const id = this.data.length+1
+            const newProduct={}
+
+            newProduct.id=id
+            newProduct.title=product.title
+            newProduct.price=product.price
+            newProduct.thumbnail=product.thumbnail
+
+            this.data.push(newProduct)
+
+            return newProduct
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     async getAll(){
         try{
             return this.data
@@ -14,16 +33,16 @@ class Product{
 
     async getById(id){
         try {
-            const resData=await this.data[id-1]
+            const resData=await this.data[id]
             if (resData) {
-                const resId= Object.values(this.dataLenght[id-1]).length
+                const resId= Object.values(this.data[id]).length
                 if (resId!=0) {
-                    return this.data[id-1]
+                    return this.data[id]
                 }else{
-                    throw Error("The register don't exist")
+                    return {message: "El registro no existe"}
                 }
             }else{
-                throw Error("The register don't exist")
+                return {message: "El registro no existe"}
             }
         } catch (error) {
             console.log(error)
@@ -32,44 +51,26 @@ class Product{
 
     async deleteById(id){
         try {
-            this.data.splice(id-1,1,{})
+            this.data.splice(id,1,{})
         } catch (error) {
             console.log(error)
         }
     }
 
-    async deleteAll(){
+    async editOne(product, id){
         try {
-            if (fs.existsSync(this.file)) {
-                await fs.promises.writeFile(this.file,JSON.stringify([], null, 2),'utf-8')
-                return console.log("Records deleted successfully!")
-            }
-            else{
-                throw Error("Sorry, the file don't exist")
-            }
-        } catch (error) {
+            this.data[id].title = await product.title
+            this.data[id].price = await product.price
+            this.data[id].thumbnail = await product.thumbnail
+            return this.data[id]
+            
+        }catch (error) {
             console.log(error)
         }
     }
+
+    
 
 }
 
-// Instance class
-
-const data= new Container()
-
-// Methods
-
-// data.save({
-//     title:"Shoes",
-//     price:300,
-//     thumbnail:"https://cdn-icons-png.flaticon.com/512/860/860895.png"
-// })
-
-// data.getAll()
-
-// data.getById(1) //Parameter
-
-// data.getDeleteById(2) //Parameter
-
-// data.deleteAll()
+module.exports=Product

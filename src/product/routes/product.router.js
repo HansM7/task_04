@@ -1,16 +1,19 @@
-import { express } from "express";
-import { Product } from "../model/"
-import { isId } from "../middlewares/"
-import { getAll,getById } from "../controllers/"
-
-const product = new Product()
+const express = require("express")
+const {isId,register} = require("../middlewares/")
+const {getAllController, getByIdController, registerController, editController, deleteOneController} = require("../controllers/product.controller")
 
 const router = express.Router()
 
-router.get('/producto', getAll(req,res))
+router.get('/productos', getAllController)
 
-router.get('/producto/:id', isId(req,res,next), getById(req,res))
+router.get('/productos/:id', isId, getByIdController)
 
-module.exports = {
-    routerProducto:router
+router.post('/productos/', register, registerController)
+
+router.put('/productos/:id', isId, register, editController)
+
+router.delete('/productos/:id', isId, deleteOneController)
+
+module.exports={
+    routerProduct: router
 }

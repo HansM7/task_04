@@ -4,7 +4,6 @@
     "express": "^4.18.1",
     "nodemon": "^2.0.16"
   },
-  "type": "module",
   "name": "task_04",
   "version": "1.0.0",
   "main": "index.js",
